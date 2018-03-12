@@ -2,7 +2,7 @@
   <div id="app">
     <!--img src="./assets/logo.png"-->
     <!--HelloWorld/-->
-    <vue-cropper :auto-crop='true'></vue-cropper>
+    <vue-cropper :src="require('./assets/test.png')"></vue-cropper>
   </div>
 </template>
 
