@@ -1,13 +1,14 @@
 <template>
-	<div class="workbench">
+	<div>
 		<img :src="src" alt="" ref="cropper">
 	</div>
 </template>
 
 <script>
 	import Cropper from 'cropperjs';
+    require('cropperjs/dist/cropper.min.css');
 	export default {
-		name:'vue-cropper',
+		name: 'vue-cropper',
 		props: {
 			src: {
 				type: String,
@@ -181,8 +182,8 @@
 			clear() {
 				this.$refs.cropper.cropper.clear();
 			},
-			replace(url,hasSameSize = false) {
-				this.$refs.cropper.cropper.replace(url,hasSameSize);
+			replace(url, hasSameSize = false) {
+				this.$refs.cropper.cropper.replace(url, hasSameSize);
 			},
 			enable() {
 				this.$refs.cropper.cropper.enable();
@@ -193,17 +194,23 @@
 			destroy() {
 				this.$refs.cropper.cropper.destroy();
 			},
-			move(offsetX,offsetY = null) {
-				this.$refs.cropper.cropper.move(offsetX,offsetY);
+			move(offsetX, offsetY = null) {
+                if (offsetY === null) {
+                    offsetY = offsetX;
+                }
+				this.$refs.cropper.cropper.move(offsetX, offsetY);
 			},
-			moveTo(x,y = null) {
-				this.$refs.cropper.cropper.moveTo(x,y);
+			moveTo(x, y = null) {
+                if (y === null) {
+                    y = x;
+                }
+				this.$refs.cropper.cropper.moveTo(x, y);
 			},
 			zoomFn(ratio) {
 				this.$refs.cropper.cropper.zoom(ratio);
 			},
-			zoomTo(ratio,pivot = null) {
-				this.$refs.cropper.cropper.zoomTo(ratio,pivot);
+			zoomTo(ratio, pivot = {}) {
+				this.$refs.cropper.cropper.zoomTo(ratio, pivot);
 			},
 			rotate(degree) {
 				this.$refs.cropper.cropper.rotate(degree);
@@ -211,8 +218,11 @@
 			rotateTo(degree) {
 				this.$refs.cropper.cropper.rotateTo(degree);
 			},
-			scale(scaleX,scaleY = null) {
-				this.$refs.cropper.cropper.scale(scaleX,scaleY);
+			scale(scaleX, scaleY = null) {
+			    if (scaleY === null) {
+                    scaleY = scaleX;
+				}
+				this.$refs.cropper.cropper.scale(scaleX, scaleY);
 			},
 			scaleX(x) {
 				this.$refs.cropper.cropper.scaleX(x);
@@ -244,7 +254,7 @@
 			setCropBoxData(data) {
 				this.$refs.cropper.cropper.setCropBoxData(data);
 			},
-			getCroppedCanvas(options = null) {
+			getCroppedCanvas(options = {}) {
 				return this.$refs.cropper.cropper.getCroppedCanvas(options);
 			},
 			setAspectRatio(aspectRatio) {
@@ -258,7 +268,7 @@
 </script>
 
 <style scoped>
-.img{
+.img {
 	max-width: 100%;
 	width: 50vw;
 	height: 50vh;

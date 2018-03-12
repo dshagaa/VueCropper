@@ -1,21 +1,23 @@
 <template>
   <div id="app">
-    <!--img src="./assets/logo.png"-->
-    <!--HelloWorld/-->
-    <vue-cropper :src="require('./assets/test.png')"></vue-cropper>
+    <vue-cropper :src="require('./assets/test.jpg')" ref="crop"></vue-cropper>
+    <button @click="myImage">Click here!</button>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld'
-import VueCroper from './components/VueCropper'
+import VueCroper from './components/VueCropper';
 
 export default {
   name: 'App',
   components: {
-    HelloWorld,
-    'vue-cropper':VueCroper
-  }
+      'vue-cropper': VueCroper
+  },
+    methods: {
+      myImage() {
+          console.log(this.$refs.crop.getCroppedCanvas().toDataURL());
+      }
+    }
 }
 </script>
 
