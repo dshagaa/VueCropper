@@ -5,7 +5,7 @@
 			<div class="row">
 				<div class="left col-md-9">
 					<div class="workbench col-md-12">
-						<vue-cropper :src="require('./assets/test.jpg')" ref="crop" height="425"></vue-cropper>
+						<vue-cropper :src="image.source" ref="crop" height="425"></vue-cropper>
 					</div>
 					<br>
 					<div class="buttons col-md-12">
@@ -42,7 +42,7 @@
 							<span class="btn btn-secondary">Scale (-2, -1)</span>
 						</div>
 						<div class="five">
-							<textarea name="" id="" rows="1" placeholder="Get data to here or set data with this value"></textarea>
+							<textarea v-model="textArea" rows="1" placeholder="Get data to here or set data with this value"></textarea>
 						</div>
 					</div>
 				</div>
@@ -90,17 +90,16 @@
 					</div><br>
 					<div class="controllers">
 						<div class="btn-group">
-							<span class="btn btn-primary">16:9</span>
-							<span class="btn btn-primary">4:3</span>
-							<span class="btn btn-primary">1:1</span>
-							<span class="btn btn-primary">2:3</span>
-							<span class="btn btn-primary">Free</span>
+							<span class="btn btn-primary" 
+							v-for="(ratio,index) in controllers.aspectRatioList" 
+							@click="setAspectRatio(ratio.value)"
+							:key="index">{{ratio.label}}</span>
 						</div>
 						<div class="btn-group">
-							<span class="btn btn-primary">VM0</span>
-							<span class="btn btn-primary">VM1</span>
-							<span class="btn btn-primary">VM2</span>
-							<span class="btn btn-primary">VM3</span>
+							<span class="btn btn-primary"
+							v-for="(vM,index) in controllers.viewMode"
+							:key="index"
+							@click="setViewMode(vM.value)">{{vM.label}}</span>
 						</div>
 						<div class="btn-group dropdown">
 							<button data-toggle="dropdown" class="btn btn-primary dropdown-toggle">
@@ -234,15 +233,79 @@
 import VueCroper from "./components/VueCropper";
 
 export default {
-  name: "App",
-  components: {
-    "vue-cropper": VueCroper
-  },
-  methods: {
-    myImage() {
-      console.log(this.$refs.crop.getCroppedCanvas().toDataURL());
-    }
-  }
+	name: "App",
+	components: {
+		"vue-cropper": VueCroper
+	},
+	methods: {
+		setAspectRatio(value) {
+			this.$refs.crop.setAspectRatio(value);
+		},
+		setViewMode(value) {
+			this.$refs.crop.destroy();
+			this.$refs.crop.viewMode = value;
+			this.$refs.crop.init();
+		}
+	},
+	data(){
+		return {
+			image: {
+				source: require('./assets/test.jpg'),
+				miniatures: {
+					lg: '',
+					md: '',
+					sm: '',
+					xs: ''
+				}
+			},
+			textArea: '',
+			inputs: {
+				x: '',
+				y: '',
+				w: '',
+				h: '',
+				r: '',
+				sX: '',
+				sY: ''
+			},
+			controllers: {
+				aspectRatioList: [
+					{label: '16:9', value: 16/9},
+					{label: '4:3', value: 4/3},
+					{label: '1:1', value: 1},
+					{label: '2:3', value: 2/3},
+					{label: 'Free', value: NaN}
+				],
+				viewMode: [
+					{label: 'VM0', value: 0},
+					{label: 'VM1', value: 1},
+					{label: 'VM2', value: 2},
+					{label: 'VM3', value: 3}
+				],
+				options: {
+					responsive: true,
+					restore: true,
+					checkCrossOrigin: true,
+					checkOrientation: true,
+					modal: true,
+					guides: true,
+					center: true,
+					highlight: true,
+					background: true,
+					autoCrop: true,
+					movable: true,
+					rotatable: true,
+					scalable: true,
+					zoomable: true,
+					zoomOnTouch: true,
+					zoomOnWheel: true,
+					cropBoxMovable: true,
+					cropBoxResizable: true,
+					toggleDragModeOnDblclick: true
+				}
+			}
+		}
+	}
 };
 </script>
 
