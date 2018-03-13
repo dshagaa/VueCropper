@@ -27,29 +27,31 @@
 							<span class="btn btn-secondary">Get Data</span>
 							<span class="btn btn-secondary">Set Data</span>
 							<span class="btn btn-secondary">Get Container Data</span>
-							<span class="btn btn-secondary">Get Image Data</span>
-							<span class="btn btn-secondary">Get Canvas Data</span>
 						</div>
 						<div class="three">
+							<span class="btn btn-secondary">Get Image Data</span>
+							<span class="btn btn-secondary">Get Canvas Data</span>
 							<span class="btn btn-secondary">Set Canvas Data</span>
 							<span class="btn btn-secondary">Get Crop Box Data</span>
 							<span class="btn btn-secondary">Set Crop Box Data</span>
+						</div>
+						<div class="four">
 							<span class="btn btn-secondary">Move to [0,0]</span>
 							<span class="btn btn-secondary">Zoom to 100%</span>
 							<span class="btn btn-secondary">Rotate 180º</span>
 							<span class="btn btn-secondary">Scale (-2, -1)</span>
 						</div>
-						<div class="four">
-							<textarea name="" id="" cols="130" rows="1" placeholder="Get data to here or set data with this value"></textarea>
+						<div class="five">
+							<textarea name="" id="" rows="1" placeholder="Get data to here or set data with this value"></textarea>
 						</div>
 					</div>
 				</div>
 				<div class="right col-md-3">
 					<div class="previews">
-						<img src="" alt="" class="col-md-12">
-						<img src="" alt="" class="col-md-4">
-						<img src="" alt="" class="col-md-4">
-						<img src="" alt="" class="col-md-4">
+						<img src="" alt="" class="" height="144" width="256">
+						<img src="" alt="" class="" height="72" width="128">
+						<img src="" alt="" class="" height="36" width="64">
+						<img src="" alt="" class="" height="18" width="32">
 					</div>
 					<div class="inputs">
 						<div class="input-group">
@@ -85,8 +87,143 @@
 							<div class="input-group-prepend"><span class="input-group-text">ScaleY</span></div>
 							<input type="text" class="form-control">
 						</div>
+					</div><br>
+					<div class="controllers">
+						<div class="btn-group">
+							<span class="btn btn-primary">16:9</span>
+							<span class="btn btn-primary">4:3</span>
+							<span class="btn btn-primary">1:1</span>
+							<span class="btn btn-primary">2:3</span>
+							<span class="btn btn-primary">Free</span>
+						</div>
+						<div class="btn-group">
+							<span class="btn btn-primary">VM0</span>
+							<span class="btn btn-primary">VM1</span>
+							<span class="btn btn-primary">VM2</span>
+							<span class="btn btn-primary">VM3</span>
+						</div>
+						<div class="btn-group dropdown">
+							<button data-toggle="dropdown" class="btn btn-primary dropdown-toggle">
+								Toggle Options
+							</button>
+							<ul class="dropdown-menu">
+								<li class="dropdown-item">
+								<div class="form-check">
+									<input class="form-check-input" id="responsive" name="responsive" checked="" type="checkbox">
+									<label class="form-check-label" for="responsive">responsive</label>
+								</div>
+								</li>
+								<li class="dropdown-item">
+								<div class="form-check">
+									<input class="form-check-input" id="restore" name="restore" checked="" type="checkbox">
+									<label class="form-check-label" for="restore">restore</label>
+								</div>
+								</li>
+								<li class="dropdown-item">
+								<div class="form-check">
+									<input class="form-check-input" id="checkCrossOrigin" name="checkCrossOrigin" checked="" type="checkbox">
+									<label class="form-check-label" for="checkCrossOrigin">checkCrossOrigin</label>
+								</div>
+								</li>
+								<li class="dropdown-item">
+								<div class="form-check">
+									<input class="form-check-input" id="checkOrientation" name="checkOrientation" checked="" type="checkbox">
+									<label class="form-check-label" for="checkOrientation">checkOrientation</label>
+								</div>
+								</li>
+								<li class="dropdown-item">
+								<div class="form-check">
+									<input class="form-check-input" id="modal" name="modal" checked="" type="checkbox">
+									<label class="form-check-label" for="modal">modal</label>
+								</div>
+								</li>
+								<li class="dropdown-item">
+								<div class="form-check">
+									<input class="form-check-input" id="guides" name="guides" checked="" type="checkbox">
+									<label class="form-check-label" for="guides">guides</label>
+								</div>
+								</li>
+								<li class="dropdown-item">
+								<div class="form-check">
+									<input class="form-check-input" id="center" name="center" checked="" type="checkbox">
+									<label class="form-check-label" for="center">center</label>
+								</div>
+								</li>
+								<li class="dropdown-item">
+								<div class="form-check">
+									<input class="form-check-input" id="highlight" name="highlight" checked="" type="checkbox">
+									<label class="form-check-label" for="highlight">highlight</label>
+								</div>
+								</li>
+								<li class="dropdown-item">
+								<div class="form-check">
+									<input class="form-check-input" id="background" name="background" checked="" type="checkbox">
+									<label class="form-check-label" for="background">background</label>
+								</div>
+								</li>
+								<li class="dropdown-item">
+								<div class="form-check">
+									<input class="form-check-input" id="autoCrop" name="autoCrop" checked="" type="checkbox">
+									<label class="form-check-label" for="autoCrop">autoCrop</label>
+								</div>
+								</li>
+								<li class="dropdown-item">
+								<div class="form-check">
+									<input class="form-check-input" id="movable" name="movable" checked="" type="checkbox">
+									<label class="form-check-label" for="movable">movable</label>
+								</div>
+								</li>
+								<li class="dropdown-item">
+								<div class="form-check">
+									<input class="form-check-input" id="rotatable" name="rotatable" checked="" type="checkbox">
+									<label class="form-check-label" for="rotatable">rotatable</label>
+								</div>
+								</li>
+								<li class="dropdown-item">
+								<div class="form-check">
+									<input class="form-check-input" id="scalable" name="scalable" checked="" type="checkbox">
+									<label class="form-check-label" for="scalable">scalable</label>
+								</div>
+								</li>
+								<li class="dropdown-item">
+								<div class="form-check">
+									<input class="form-check-input" id="zoomable" name="zoomable" checked="" type="checkbox">
+									<label class="form-check-label" for="zoomable">zoomable</label>
+								</div>
+								</li>
+								<li class="dropdown-item">
+								<div class="form-check">
+									<input class="form-check-input" id="zoomOnTouch" name="zoomOnTouch" checked="" type="checkbox">
+									<label class="form-check-label" for="zoomOnTouch">zoomOnTouch</label>
+								</div>
+								</li>
+								<li class="dropdown-item">
+								<div class="form-check">
+									<input class="form-check-input" id="zoomOnWheel" name="zoomOnWheel" checked="" type="checkbox">
+									<label class="form-check-label" for="zoomOnWheel">zoomOnWheel</label>
+								</div>
+								</li>
+								<li class="dropdown-item">
+								<div class="form-check">
+									<input class="form-check-input" id="cropBoxMovable" name="cropBoxMovable" checked="" type="checkbox">
+									<label class="form-check-label" for="cropBoxMovable">cropBoxMovable</label>
+								</div>
+								</li>
+								<li class="dropdown-item">
+								<div class="form-check">
+									<input class="form-check-input" id="cropBoxResizable" name="cropBoxResizable" checked="" type="checkbox">
+									<label class="form-check-label" for="cropBoxResizable">cropBoxResizable</label>
+								</div>
+								</li>
+								<li class="dropdown-item">
+								<div class="form-check">
+									<input class="form-check-input" id="toggleDragModeOnDblclick" name="toggleDragModeOnDblclick" checked="" type="checkbox">
+									<label class="form-check-label" for="toggleDragModeOnDblclick">toggleDragModeOnDblclick</label>
+								</div>
+								</li>
+							</ul>
+						</div>
 					</div>
-					<div class="controllers"></div>
 				</div>
 			</div>
 		</div>
@@ -113,7 +250,19 @@ export default {
 .buttons > div {
   padding-bottom: 5px;
 }
+.controllers .btn-group {
+	padding-bottom: 5px;
+}
+.five textarea {
+	width: 100%;
+}
 .inputs .input-group {
   padding-bottom: 5px;
+}
+.input-group-prepend .input-group-text {
+	min-width: 5rem;
+}
+.input-group-append .input-group-text {
+	min-width: 3.5rem;
 }
 </style>
