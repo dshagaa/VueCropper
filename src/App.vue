@@ -10,36 +10,36 @@
 					<br>
 					<div class="buttons col-md-12">
 						<div class="one">
-							<div class="btn-group"><span class="btn btn-primary fas fa-arrows-alt"/><span class="btn btn-primary fas fa-crop"/></div>
-							<div class="btn-group"><span class="btn btn-primary fas fa-search-plus"/><span class="btn btn-primary fas fa-search-minus"/></div>
-							<div class="btn-group"><span class="btn btn-primary fas fa-arrow-left"/><span class="btn btn-primary fas fa-arrow-right"/><span class="btn btn-primary fas fa-arrow-up"/><span class="btn btn-primary fas fa-arrow-down"/></div>
-							<div class="btn-group"><span class="btn btn-primary fas fa-undo-alt"/><span class="btn btn-primary fas fa-redo-alt"/></div>
-							<div class="btn-group"><span class="btn btn-primary fas fa-arrows-alt-h"/><span class="btn btn-primary fas fa-arrows-alt-v"/></div>
+							<div class="btn-group"><span class="btn btn-primary fas fa-arrows-alt" @click="$refs.crop.setDragMode('move')"/><span class="btn btn-primary fas fa-crop" @click="$refs.crop.setDragMode('crop')"/></div>
+							<div class="btn-group"><span class="btn btn-primary fas fa-search-plus" @click="$refs.crop.zoomFn(0.1)"/><span class="btn btn-primary fas fa-search-minus" @click="$refs.crop.zoomFn(-0.1)"/></div>
+							<div class="btn-group"><span class="btn btn-primary fas fa-arrow-left" @click="$refs.crop.move(-10,0)"/><span class="btn btn-primary fas fa-arrow-right" @click="$refs.crop.move(10,0)"/><span class="btn btn-primary fas fa-arrow-up" @click="$refs.crop.move(0,-10)"/><span class="btn btn-primary fas fa-arrow-down" @click="$refs.crop.move(0,10)"/></div>
+							<div class="btn-group"><span class="btn btn-primary fas fa-undo-alt" @click="$refs.crop.rotate(-10)"/><span class="btn btn-primary fas fa-redo-alt" @click="$refs.crop.rotate(10)"/></div>
+							<div class="btn-group"><span class="btn btn-primary fas fa-arrows-alt-h" @click="invert('X')"/><span class="btn btn-primary fas fa-arrows-alt-v" @click="invert('Y')"/></div>
 							<div class="btn-group"><span class="btn btn-primary fas fa-check"/><span class="btn btn-primary fas fa-times"/></div>
 							<div class="btn-group"><span class="btn btn-primary fas fa-sync-alt"/><span class="btn btn-primary fas fa-upload"/><span class="btn btn-primary fas fa-power-off"/></div>
 						</div>
 						<div class="two">
 							<div class="btn-group">
-								<span class="btn btn-success">Get Croped Canvas</span>
+								<span class="btn btn-success" @click="get('getCroppedCanvas')">Get Croped Canvas</span>
 								<span class="btn btn-success">160x90</span>
 								<span class="btn btn-success">320x180</span>
 							</div>
-							<span class="btn btn-secondary">Get Data</span>
-							<span class="btn btn-secondary">Set Data</span>
-							<span class="btn btn-secondary">Get Container Data</span>
+							<span class="btn btn-secondary" @click="get('getData')">Get Data</span>
+							<span class="btn btn-secondary" @click="set('setData')">Set Data</span>
+							<span class="btn btn-secondary" @click="get('getContainerData')">Get Container Data</span>
 						</div>
 						<div class="three">
-							<span class="btn btn-secondary">Get Image Data</span>
-							<span class="btn btn-secondary">Get Canvas Data</span>
-							<span class="btn btn-secondary">Set Canvas Data</span>
-							<span class="btn btn-secondary">Get Crop Box Data</span>
-							<span class="btn btn-secondary">Set Crop Box Data</span>
+							<span class="btn btn-secondary" @click="get('getImageData')">Get Image Data</span>
+							<span class="btn btn-secondary" @click="get('getCanvasData')">Get Canvas Data</span>
+							<span class="btn btn-secondary" @click="set('setCanvasData')">Set Canvas Data</span>
+							<span class="btn btn-secondary" @click="get('getCropBoxData')">Get Crop Box Data</span>
+							<span class="btn btn-secondary" @click="set('setCropBoxData')">Set Crop Box Data</span>
 						</div>
 						<div class="four">
-							<span class="btn btn-secondary">Move to [0,0]</span>
-							<span class="btn btn-secondary">Zoom to 100%</span>
-							<span class="btn btn-secondary">Rotate 180º</span>
-							<span class="btn btn-secondary">Scale (-2, -1)</span>
+							<span class="btn btn-secondary" @click="set('moveTo',[0,0])">Move to [0,0]</span>
+							<span class="btn btn-secondary" @click="set('zoomTo',[100])">Zoom to 100%</span>
+							<span class="btn btn-secondary" @click="set('rotateTo',[180])">Rotate 180º</span>
+							<span class="btn btn-secondary" @click="set('scale',[-2,-1])">Scale (-2, -1)</span>
 						</div>
 						<div class="five">
 							<textarea v-model="textArea" rows="1" placeholder="Get data to here or set data with this value"></textarea>
@@ -56,36 +56,36 @@
 					<div class="inputs">
 						<div class="input-group">
 							<div class="input-group-prepend"><span class="input-group-text">X</span></div>
-							<input type="text" class="form-control">
+							<input type="text" class="form-control" v-model="inputs.x">
 							<div class="input-group-append"><span class="input-group-text">px</span></div>
 						</div>
 						<div class="input-group">
 							<div class="input-group-prepend"><span class="input-group-text">Y</span></div>
-							<input type="text" class="form-control">
+							<input type="text" class="form-control" v-model="inputs.y">
 							<div class="input-group-append"><span class="input-group-text">px</span></div>
 						</div>
 						<div class="input-group">
 							<div class="input-group-prepend"><span class="input-group-text">Width</span></div>
-							<input type="text" class="form-control">
+							<input type="text" class="form-control" v-model="inputs.w">
 							<div class="input-group-append"><span class="input-group-text">px</span></div>
 						</div>
 						<div class="input-group">
 							<div class="input-group-prepend"><span class="input-group-text">Height</span></div>
-							<input type="text" class="form-control">
+							<input type="text" class="form-control" v-model="inputs.h">
 							<div class="input-group-append"><span class="input-group-text">px</span></div>
 						</div>
 						<div class="input-group">
 							<div class="input-group-prepend"><span class="input-group-text">Rotate</span></div>
-							<input type="text" class="form-control">
+							<input type="text" class="form-control" v-model="inputs.r">
 							<div class="input-group-append"><span class="input-group-text">deg</span></div>
 						</div>
 						<div class="input-group">
 							<div class="input-group-prepend"><span class="input-group-text">ScaleX</span></div>
-							<input type="text" class="form-control">
+							<input type="text" class="form-control" v-model="inputs.sX">
 						</div>
 						<div class="input-group">
 							<div class="input-group-prepend"><span class="input-group-text">ScaleY</span></div>
-							<input type="text" class="form-control">
+							<input type="text" class="form-control" v-model="inputs.sY">
 						</div>
 					</div><br>
 					<div class="controllers">
@@ -242,9 +242,18 @@ export default {
 			this.$refs.crop.setAspectRatio(value);
 		},
 		setViewMode(value) {
-			this.$refs.crop.destroy();
-			this.$refs.crop.viewMode = value;
-			this.$refs.crop.init();
+			this.$refs.crop.setViewMode(value);
+		},
+		invert(e) {
+			this.$refs.crop['scale'+e](this.inputs['s'+e]*-1);
+			let data = this.$refs.crop.getImageData();
+			let key = 's'+e;
+			this.inputs[key] = data['scale'+e];
+		},
+		get(fn,param = []) {
+			let r = (this.$refs.crop[fn])();
+			this.textArea = r;
+			console.log(r)
 		}
 	},
 	data(){
@@ -265,8 +274,8 @@ export default {
 				w: '',
 				h: '',
 				r: '',
-				sX: '',
-				sY: ''
+				sX: 1,
+				sY: 1
 			},
 			controllers: {
 				aspectRatioList: [

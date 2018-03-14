@@ -169,11 +169,16 @@ export default {
     this.init();
   },
   methods: {
-    init() {
-      new Cropper(this.$refs.cropper, this.options());
+    init(options = {}) {
+      let opt = (Object.keys(options).length === 0) ? this.options() : options;
+      new Cropper(this.$refs.cropper, opt);
     },
     options() {
-      return this.$props;
+      const opt = {};
+      for (const [key, value] of Object.entries(this.$props)) {
+          opt[key] = value;
+      }
+      return opt;
     },
     cropFn() {
       this.$refs.cropper.cropper.crop();
@@ -264,6 +269,12 @@ export default {
     },
     setDragMode(mode = "none") {
       this.$refs.cropper.cropper.setDragMode(mode);
+    },
+    setViewMode(vm = 0) {
+      this.destroy();
+      let options = this.options();
+      options.viewMode = vm;
+      this.init(options);
     }
   }
 };
