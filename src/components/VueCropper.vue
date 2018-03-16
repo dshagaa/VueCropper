@@ -271,7 +271,7 @@ export default {
       this.$refs.cropper.cropper.setDragMode(mode);
     },
     setViewMode(vm = 0) {
-      this.destroy();
+      (this.$refs.cropper.cropper) ? this.destroy() : null;
       let options = this.options();
       options.viewMode = vm;
       this.init(options);

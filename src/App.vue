@@ -15,31 +15,38 @@
 							<div class="btn-group"><span class="btn btn-primary fas fa-arrow-left" @click="$refs.crop.move(-10,0)"/><span class="btn btn-primary fas fa-arrow-right" @click="$refs.crop.move(10,0)"/><span class="btn btn-primary fas fa-arrow-up" @click="$refs.crop.move(0,-10)"/><span class="btn btn-primary fas fa-arrow-down" @click="$refs.crop.move(0,10)"/></div>
 							<div class="btn-group"><span class="btn btn-primary fas fa-undo-alt" @click="$refs.crop.rotate(-10)"/><span class="btn btn-primary fas fa-redo-alt" @click="$refs.crop.rotate(10)"/></div>
 							<div class="btn-group"><span class="btn btn-primary fas fa-arrows-alt-h" @click="invert('X')"/><span class="btn btn-primary fas fa-arrows-alt-v" @click="invert('Y')"/></div>
-							<div class="btn-group"><span class="btn btn-primary fas fa-check"/><span class="btn btn-primary fas fa-times"/></div>
-							<div class="btn-group"><span class="btn btn-primary fas fa-sync-alt"/><span class="btn btn-primary fas fa-upload"/><span class="btn btn-primary fas fa-power-off"/></div>
+							<div class="btn-group"><span class="btn btn-primary fas fa-check" @click="$refs.crop.cropFn()"/><span class="btn btn-primary fas fa-times" @click="$refs.crop.clear()"/></div>
+							<div class="btn-group">
+								<span class="btn btn-primary fas fa-sync-alt" @click="$refs.crop.reset()"/>
+								<label for="inputImage" class="btn btn-primary">
+								<span class="fas fa-upload"/>
+								</label>
+								<span class="btn btn-primary fas fa-power-off" @click="$refs.crop.destroy()"/>
+								<input id="inputImage" @change="upload" type="file" accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff" hidden>
+							</div>
 						</div>
 						<div class="two">
 							<div class="btn-group">
-								<span class="btn btn-success" @click="get('getCroppedCanvas')">Get Croped Canvas</span>
-								<span class="btn btn-success">160x90</span>
-								<span class="btn btn-success">320x180</span>
+								<span class="btn btn-success" @click="getImage">Get Croped Canvas</span>
+								<span class="btn btn-success" @click="getImage(160,90)">160x90</span>
+								<span class="btn btn-success" @click="getImage(320,180)">320x180</span>
 							</div>
-							<span class="btn btn-secondary" @click="get('getData')">Get Data</span>
-							<span class="btn btn-secondary" @click="set('setData')">Set Data</span>
-							<span class="btn btn-secondary" @click="get('getContainerData')">Get Container Data</span>
+							<span class="btn btn-secondary" @click="getData('getData')">Get Data</span>
+							<span class="btn btn-secondary" @click="setData('setData')">Set Data</span>
+							<span class="btn btn-secondary" @click="getData('getContainerData')">Get Container Data</span>
 						</div>
 						<div class="three">
-							<span class="btn btn-secondary" @click="get('getImageData')">Get Image Data</span>
-							<span class="btn btn-secondary" @click="get('getCanvasData')">Get Canvas Data</span>
-							<span class="btn btn-secondary" @click="set('setCanvasData')">Set Canvas Data</span>
-							<span class="btn btn-secondary" @click="get('getCropBoxData')">Get Crop Box Data</span>
-							<span class="btn btn-secondary" @click="set('setCropBoxData')">Set Crop Box Data</span>
+							<span class="btn btn-secondary" @click="getData('getImageData')">Get Image Data</span>
+							<span class="btn btn-secondary" @click="getData('getCanvasData')">Get Canvas Data</span>
+							<span class="btn btn-secondary" @click="setData('setCanvasData')">Set Canvas Data</span>
+							<span class="btn btn-secondary" @click="getData('getCropBoxData')">Get Crop Box Data</span>
+							<span class="btn btn-secondary" @click="setData('setCropBoxData')">Set Crop Box Data</span>
 						</div>
 						<div class="four">
-							<span class="btn btn-secondary" @click="set('moveTo',[0,0])">Move to [0,0]</span>
-							<span class="btn btn-secondary" @click="set('zoomTo',[100])">Zoom to 100%</span>
-							<span class="btn btn-secondary" @click="set('rotateTo',[180])">Rotate 180º</span>
-							<span class="btn btn-secondary" @click="set('scale',[-2,-1])">Scale (-2, -1)</span>
+							<span class="btn btn-secondary" @click="set('moveTo',0,0)">Move to [0,0]</span>
+							<span class="btn btn-secondary" @click="set('zoomTo',1)">Zoom to 100%</span>
+							<span class="btn btn-secondary" @click="set('rotateTo',180)">Rotate 180º</span>
+							<span class="btn btn-secondary" @click="set('scale',-2,-1)">Scale (-2, -1)</span>
 						</div>
 						<div class="five">
 							<textarea v-model="textArea" rows="1" placeholder="Get data to here or set data with this value"></textarea>
@@ -48,10 +55,10 @@
 				</div>
 				<div class="right col-md-3">
 					<div class="previews">
-						<img src="" alt="" class="" height="144" width="256">
-						<img src="" alt="" class="" height="72" width="128">
-						<img src="" alt="" class="" height="36" width="64">
-						<img src="" alt="" class="" height="18" width="32">
+						<img :src="image.preview" alt="" class="" height="144" width="256">
+						<img :src="image.preview" alt="" class="" height="72" width="128">
+						<img :src="image.preview" alt="" class="" height="36" width="64">
+						<img :src="image.preview" alt="" class="" height="18" width="32">
 					</div>
 					<div class="inputs">
 						<div class="input-group">
@@ -238,6 +245,9 @@ export default {
 		"vue-cropper": VueCroper
 	},
 	methods: {
+		getImage(w, h) {
+			this.image.preview = this.$refs.crop.getCroppedCanvas({width:w,height:h}).toDataURL();
+		},
 		setAspectRatio(value) {
 			this.$refs.crop.setAspectRatio(value);
 		},
@@ -250,16 +260,49 @@ export default {
 			let key = 's'+e;
 			this.inputs[key] = data['scale'+e];
 		},
-		get(fn,param = []) {
+		getData(fn, param = []) {
 			let r = (this.$refs.crop[fn])();
-			this.textArea = r;
-			console.log(r)
+			this.textArea = JSON.stringify(r);
+		},
+		setData(fn) {
+			let data = JSON.parse(this.textArea);
+			this.$refs.crop[fn](data);
+		},
+		set(fn, param1 = 0, param2 = 0) {
+			this.$refs.crop[fn](param1,param2);
+		},
+		upload(e) {
+			let files = e.target.files;
+			let file;
+			let uploadedImageURL = '', uploadedImageName, uploadedImageType;
+			let URL = window.URL;
+
+			if (this.$refs.crop && files && files.length) {
+				file = files[0];
+
+				if (/^image\/\w+/.test(file.type)) {
+					uploadedImageType = file.type;
+					uploadedImageName = file.name;
+
+					console.log(uploadedImageURL)
+					if (uploadedImageURL) {
+						URL.revokeObjectURL(uploadedImageURL);
+					}
+
+					this.image.source = uploadedImageURL = URL.createObjectURL(file);
+					this.$refs.crop.replace(this.image.source);
+					e.target.value = null;
+				} else {
+					window.alert('Please choose an image file.');
+				}
+			}
 		}
 	},
 	data(){
 		return {
 			image: {
 				source: require('./assets/test.jpg'),
+				preview: '',
 				miniatures: {
 					lg: '',
 					md: '',
@@ -336,5 +379,11 @@ export default {
 }
 .input-group-append .input-group-text {
 	min-width: 3.5rem;
+}
+.one .btn-group label {
+	padding-top: 0;
+	padding-bottom: 0;
+	margin-top: 0;
+	margin-bottom: 0;
 }
 </style>
