@@ -5,7 +5,7 @@
 			<div class="row">
 				<div class="left col-md-9">
 					<div class="workbench col-md-12">
-						<vue-cropper :src="image.source" ref="crop" height="425"></vue-cropper>
+						<vue-cropper :src="image.source" :cropmove="preview" :crop="preview" ref="crop" height="425"></vue-cropper>
 					</div>
 					<br>
 					<div class="buttons col-md-12">
@@ -55,10 +55,10 @@
 				</div>
 				<div class="right col-md-3">
 					<div class="previews">
-						<img :src="image.preview" alt="" class="" height="144" width="256">
-						<img :src="image.preview" alt="" class="" height="72" width="128">
-						<img :src="image.preview" alt="" class="" height="36" width="64">
-						<img :src="image.preview" alt="" class="" height="18" width="32">
+						<img :src="image.miniatures.lg" alt="" class="" width="256" height="144">
+						<img :src="image.miniatures.md" alt="" class="" width="128" height="72">
+						<img :src="image.miniatures.sm" alt="" class="" width="64" height="36">
+						<img :src="image.miniatures.xs" alt="" class="" width="32" height="18">
 					</div>
 					<div class="inputs">
 						<div class="input-group">
@@ -114,11 +114,12 @@
 							</button>
 							<ul class="dropdown-menu">
 								<li class="dropdown-item">
-								<div class="form-check">
-									<input class="form-check-input" id="responsive" name="responsive" checked="" type="checkbox">
-									<label class="form-check-label" for="responsive">responsive</label>
+								<div class="form-check" v-for="(opt, index) in controllers.options" :key="index">
+									<input class="form-check-input" :id="index" :name="index" type="checkbox" v-model="controllers.options[index]">
+									<label class="form-check-label" :for="index">{{index}}</label>
 								</div>
 								</li>
+							<!--
 								<li class="dropdown-item">
 								<div class="form-check">
 									<input class="form-check-input" id="restore" name="restore" checked="" type="checkbox">
@@ -227,10 +228,17 @@
 									<label class="form-check-label" for="toggleDragModeOnDblclick">toggleDragModeOnDblclick</label>
 								</div>
 								</li>
+							-->
 							</ul>
 						</div>
 					</div>
 				</div>
+			</div>
+		</div>
+		<div class="myModalC" ref="previewModal" v-show="modal">
+			<div class="myModal">
+				<span id="closeModal" @click="modal=false" class="fas fa-times btn-danger"></span>
+				<img :src="image.preview" alt="">
 			</div>
 		</div>
 	</div>
@@ -245,8 +253,17 @@ export default {
 		"vue-cropper": VueCroper
 	},
 	methods: {
+		preview() {
+			this.image.miniatures = {
+				lg: this.$refs.crop.getCroppedCanvas({width:256,height:144}).toDataURL(),
+				md: this.$refs.crop.getCroppedCanvas({width:128,height:72}).toDataURL(),
+				sm: this.$refs.crop.getCroppedCanvas({width:64,height:36}).toDataURL(),
+				xs: this.$refs.crop.getCroppedCanvas({width:32,height:18}).toDataURL()
+			};
+		},
 		getImage(w, h) {
 			this.image.preview = this.$refs.crop.getCroppedCanvas({width:w,height:h}).toDataURL();
+			this.modal = true;
 		},
 		setAspectRatio(value) {
 			this.$refs.crop.setAspectRatio(value);
@@ -300,6 +317,7 @@ export default {
 	},
 	data(){
 		return {
+			modal: false,
 			image: {
 				source: require('./assets/test.jpg'),
 				preview: '',
@@ -385,5 +403,29 @@ export default {
 	padding-bottom: 0;
 	margin-top: 0;
 	margin-bottom: 0;
+}
+.myModalC {
+	width: 100vw;
+	height: 100vh;;
+	margin: 0;
+	padding: 0;
+	top: 0;
+	left: 0;
+	position: absolute;
+	background-color: rgba(0, 0, 0, 0.7);
+}
+.myModal {
+	width: 70vw;
+	height: 40vh;
+	margin: auto;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	position: fixed;
+}
+.myModal img {
+	width: 100%;
+	height: auto;
 }
 </style>
