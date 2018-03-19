@@ -5,7 +5,7 @@
 			<div class="row">
 				<div class="left col-md-9">
 					<div class="workbench col-md-12">
-						<vue-cropper :src="image.source" :cropmove="preview" :crop="preview" ref="crop" height="425"></vue-cropper>
+						<vue-cropper :src="image.source" :cropend="preview" :cropmove="preview" :ready="preview" ref="crop" height="425"></vue-cropper>
 					</div>
 					<br>
 					<div class="buttons col-md-12">
@@ -254,12 +254,11 @@ export default {
 	},
 	methods: {
 		preview() {
-			this.image.miniatures = {
-				lg: this.$refs.crop.getCroppedCanvas({width:256,height:144}).toDataURL(),
-				md: this.$refs.crop.getCroppedCanvas({width:128,height:72}).toDataURL(),
-				sm: this.$refs.crop.getCroppedCanvas({width:64,height:36}).toDataURL(),
-				xs: this.$refs.crop.getCroppedCanvas({width:32,height:18}).toDataURL()
-			};
+			let crop = this.$refs.crop;
+			this.image.miniatures.lg = crop.getCroppedCanvas({width:256,height:144}).toDataURL();
+			this.image.miniatures.md = crop.getCroppedCanvas({width:128,height:72}).toDataURL();
+			this.image.miniatures.sm = crop.getCroppedCanvas({width:64,height:36}).toDataURL();
+			this.image.miniatures.xs = crop.getCroppedCanvas({width:32,height:18}).toDataURL();
 		},
 		getImage(w, h) {
 			this.image.preview = this.$refs.crop.getCroppedCanvas({width:w,height:h}).toDataURL();
@@ -301,7 +300,6 @@ export default {
 					uploadedImageType = file.type;
 					uploadedImageName = file.name;
 
-					console.log(uploadedImageURL)
 					if (uploadedImageURL) {
 						URL.revokeObjectURL(uploadedImageURL);
 					}
@@ -330,11 +328,11 @@ export default {
 			},
 			textArea: '',
 			inputs: {
-				x: '',
-				y: '',
-				w: '',
-				h: '',
-				r: '',
+				x: 0,
+				y: 0,
+				w: 0,
+				h: 0,
+				r: 0,
 				sX: 1,
 				sY: 1
 			},

@@ -32,6 +32,10 @@ export default {
       type: Object,
       default: null
     },
+    preview:{
+      type: [String,Array,Object,Element],
+      default: ''
+    },
     responsive: {
       type: Boolean,
       default: true
