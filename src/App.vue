@@ -62,37 +62,37 @@
 					</div>
 					<div class="inputs">
 						<div class="input-group">
-							<div class="input-group-prepend"><span class="input-group-text">X</span></div>
-							<input type="text" class="form-control" v-model="inputs.x">
-							<div class="input-group-append"><span class="input-group-text">px</span></div>
+							<div class="input-group-prepend"><span class="input-group-text">{{inputs.x.label}}</span></div>
+							<input type="text" class="form-control" v-model="inputs.x.value" @change="set(inputs.y.fn,parseInt(inputs.x.value),parseInt(inputs.y.value))">
+							<div class="input-group-append"><span class="input-group-text">{{inputs.x.unidad}}</span></div>
 						</div>
 						<div class="input-group">
-							<div class="input-group-prepend"><span class="input-group-text">Y</span></div>
-							<input type="text" class="form-control" v-model="inputs.y">
-							<div class="input-group-append"><span class="input-group-text">px</span></div>
+							<div class="input-group-prepend"><span class="input-group-text">{{inputs.y.label}}</span></div>
+							<input type="text" class="form-control" v-model="inputs.y.value" @change="set(inputs.y.fn,parseInt(inputs.x.value),parseInt(inputs.y.value))">
+							<div class="input-group-append"><span class="input-group-text">{{inputs.y.unidad}}</span></div>
 						</div>
 						<div class="input-group">
-							<div class="input-group-prepend"><span class="input-group-text">Width</span></div>
-							<input type="text" class="form-control" v-model="inputs.w">
-							<div class="input-group-append"><span class="input-group-text">px</span></div>
+							<div class="input-group-prepend"><span class="input-group-text">{{inputs.w.label}}</span></div>
+							<input type="text" class="form-control" v-model="inputs.w.value" @change="set(inputs.w.fn,{width:parseInt(inputs.w.value)})">
+							<div class="input-group-append"><span class="input-group-text">{{inputs.w.unidad}}</span></div>
 						</div>
 						<div class="input-group">
-							<div class="input-group-prepend"><span class="input-group-text">Height</span></div>
-							<input type="text" class="form-control" v-model="inputs.h">
-							<div class="input-group-append"><span class="input-group-text">px</span></div>
+							<div class="input-group-prepend"><span class="input-group-text">{{inputs.h.label}}</span></div>
+							<input type="text" class="form-control" v-model="inputs.h.value" @change="set(inputs.h.fn,{height:parseInt(inputs.h.value)})">
+							<div class="input-group-append"><span class="input-group-text">{{inputs.h.unidad}}</span></div>
 						</div>
 						<div class="input-group">
-							<div class="input-group-prepend"><span class="input-group-text">Rotate</span></div>
-							<input type="text" class="form-control" v-model="inputs.r">
-							<div class="input-group-append"><span class="input-group-text">deg</span></div>
+							<div class="input-group-prepend"><span class="input-group-text">{{inputs.r.label}}</span></div>
+							<input type="text" class="form-control" v-model="inputs.r.value" @change="set(inputs.r.fn,parseInt(inputs.r.value))">
+							<div class="input-group-append"><span class="input-group-text">{{inputs.r.unidad}}</span></div>
 						</div>
 						<div class="input-group">
-							<div class="input-group-prepend"><span class="input-group-text">ScaleX</span></div>
-							<input type="text" class="form-control" v-model="inputs.sX">
+							<div class="input-group-prepend"><span class="input-group-text">{{inputs.sX.label}}</span></div>
+							<input type="text" class="form-control" v-model="inputs.sX.value" @change="set(inputs.sX.fn,parseInt(inputs.sX.value))">
 						</div>
 						<div class="input-group">
-							<div class="input-group-prepend"><span class="input-group-text">ScaleY</span></div>
-							<input type="text" class="form-control" v-model="inputs.sY">
+							<div class="input-group-prepend"><span class="input-group-text">{{inputs.sY.label}}</span></div>
+							<input type="text" class="form-control" v-model="inputs.sY.value" @change="set(inputs.sY.fn,parseInt(inputs.sY.value))">
 						</div>
 					</div><br>
 					<div class="controllers">
@@ -115,7 +115,7 @@
 							<ul class="dropdown-menu">
 								<li class="dropdown-item">
 								<div class="form-check" v-for="(opt, index) in controllers.options" :key="index">
-									<input class="form-check-input" :id="index" :name="index" type="checkbox" v-model="controllers.options[index]">
+									<input class="form-check-input" :id="index" :name="index" type="checkbox" v-model="controllers.options[index]" @change="setOptions">
 									<label class="form-check-label" :for="index">{{index}}</label>
 								</div>
 								</li>
@@ -252,7 +252,57 @@ export default {
 	components: {
 		"vue-cropper": VueCroper
 	},
+	beforeUpdate() {
+		this.get();
+	},
 	methods: {
+		get() {
+			let cnvDta = this.$refs.crop.getCanvasData();
+			let imgDta = this.$refs.crop.getImageData();
+			this.inputs.x.value = cnvDta.left;
+			this.inputs.y.value = cnvDta.top;
+			this.inputs.w.value = cnvDta.width;
+			this.inputs.h.value = cnvDta.height;
+			this.inputs.r.value = imgDta.rotate;
+			this.inputs.sX.value = imgDta.scaleX;
+			this.inputs.sY.value = imgDta.scaleY;
+			
+		},
+		getData(fn, param = []) {
+			let r = (this.$refs.crop[fn])();
+			this.textArea = JSON.stringify(r);
+		},
+		getImage(w, h) {
+			this.image.preview = this.$refs.crop.getCroppedCanvas({width:w,height:h}).toDataURL();
+			this.modal = true;
+		},
+		set(fn, param1 = 0, param2 = 0) {
+			this.$refs.crop[fn](param1,param2);
+		},
+		setAspectRatio(value) {
+			this.$refs.crop.setAspectRatio(value);
+		},
+		setData(fn) {
+			let data = JSON.parse(this.textArea);
+			this.$refs.crop[fn](data);
+		},
+		setOptions(){
+			let opt = {};
+			for (const [key, value] of Object.entries(this.controllers.options)) {
+				opt[key] = value;
+			}
+			this.$refs.crop.destroy();
+			this.$refs.crop.init(opt);
+		},
+		setViewMode(value) {
+			this.$refs.crop.setViewMode(value);
+		},
+		invert(e) {
+			this.$refs.crop['scale'+e](this.inputs['s'+e].value*-1);
+			let data = this.$refs.crop.getImageData();
+			let key = 's'+e;
+			this.inputs[key].value = data['scale'+e];
+		},
 		preview() {
 			let crop = this.$refs.crop;
 			this.image.miniatures.lg = crop.getCroppedCanvas({width:256,height:144}).toDataURL();
@@ -260,39 +310,11 @@ export default {
 			this.image.miniatures.sm = crop.getCroppedCanvas({width:64,height:36}).toDataURL();
 			this.image.miniatures.xs = crop.getCroppedCanvas({width:32,height:18}).toDataURL();
 		},
-		getImage(w, h) {
-			this.image.preview = this.$refs.crop.getCroppedCanvas({width:w,height:h}).toDataURL();
-			this.modal = true;
-		},
-		setAspectRatio(value) {
-			this.$refs.crop.setAspectRatio(value);
-		},
-		setViewMode(value) {
-			this.$refs.crop.setViewMode(value);
-		},
-		invert(e) {
-			this.$refs.crop['scale'+e](this.inputs['s'+e]*-1);
-			let data = this.$refs.crop.getImageData();
-			let key = 's'+e;
-			this.inputs[key] = data['scale'+e];
-		},
-		getData(fn, param = []) {
-			let r = (this.$refs.crop[fn])();
-			this.textArea = JSON.stringify(r);
-		},
-		setData(fn) {
-			let data = JSON.parse(this.textArea);
-			this.$refs.crop[fn](data);
-		},
-		set(fn, param1 = 0, param2 = 0) {
-			this.$refs.crop[fn](param1,param2);
-		},
 		upload(e) {
 			let files = e.target.files;
 			let file;
 			let uploadedImageURL = '', uploadedImageName, uploadedImageType;
 			let URL = window.URL;
-
 			if (this.$refs.crop && files && files.length) {
 				file = files[0];
 
@@ -328,13 +350,13 @@ export default {
 			},
 			textArea: '',
 			inputs: {
-				x: 0,
-				y: 0,
-				w: 0,
-				h: 0,
-				r: 0,
-				sX: 1,
-				sY: 1
+				x: {label: 'X', value: 0, fn: 'moveTo', unidad: 'px'},
+				y: {label: 'Y', value: 0, fn: 'moveTo', unidad: 'px'},
+				w: {label: 'Width', value: 0, fn: 'setCanvasData', unidad: 'px'},
+				h: {label: 'Height', value: 0, fn: 'setCanvasData', unidad: 'px'},
+				r: {label: 'Rotate', value: 0, fn: 'rotateTo', unidad: 'deg'},
+				sX: {label: 'ScaleX', value: 1, fn: 'scaleX'},
+				sY: {label: 'ScaleY', value: 1, fn: 'scaleY'}
 			},
 			controllers: {
 				aspectRatioList: [
