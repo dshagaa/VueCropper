@@ -1,6 +1,6 @@
-# vue-cropper
+# VueCropper
 
-> A Vue.js project
+> A Vue Cropper project
 
 ## Build Setup
 
